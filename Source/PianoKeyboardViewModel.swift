@@ -50,12 +50,22 @@ public class PianoKeyboardViewModel: ObservableObject, PianoKeyViewModelDelegate
         }
     }
 
+    private var lastTouchTimes: [Int: Date] = [:]
+    private let touchThreshold: TimeInterval = 0.1 // 100 milliseconds
+
     private func updateKeys() {
         var keyDownAt = Array(repeating: false, count: numberOfKeys)
+        let currentTime = Date()
 
         for touch in touches {
             if let index = getKeyContaining(touch) {
+                if let lastTouchTime = lastTouchTimes[index] {
+                    if currentTime.timeIntervalSince(lastTouchTime) < touchThreshold {
+                        continue // Skip this touch if it's too soon after the last one
+                    }
+                }
                 keyDownAt[index] = true
+                lastTouchTimes[index] = currentTime
             }
         }
 
