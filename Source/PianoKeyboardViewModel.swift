@@ -118,7 +118,7 @@ public class PianoKeyboardViewModel: ObservableObject, PianoKeyViewModelDelegate
         return keyNum
     }
 
-    private func reset() {
+    public func reset() {
         for i in 0..<numberOfKeys {
             keys[i].touchDown = false
             keys[i].latched = false
